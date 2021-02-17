@@ -3,7 +3,7 @@
     <nav
       v-for="band in bands"
       :key="band.id"
-      v-on:click.stop="setAlbums(band.id)"
+      v-on:mouseover.stop="setAlbums(band.id)"
     >
       <div class="menu-item">
         <a href="#">{{ band.name }}</a>

@@ -8,7 +8,7 @@
       <div class="menu-item">
         <a href="#">{{ genre.name }}</a>
       </div>
-      <div v-if="genre.id === Id" v-on:hide-="close">
+      <div v-if="genre.id === Id">
         <Dropdown v-bind:bandsId="Id" />
       </div>
     </nav>
@@ -31,6 +31,7 @@ export default class NavBar extends Vue {
   get genres() {
     return this.$store.state.genres;
   }
+  
   setBands(genre: number) {
     if (this.Id && this.isActive === true) {
       this.Id = null;
@@ -40,12 +41,6 @@ export default class NavBar extends Vue {
     this.Id = genre;
     this.isActive = true;
   }
-
-//   onClickOutside(event: Event) {
-//     const { collabsibles } = this.$refs;
-//     if (!collabsibles || collabsibles.contains(event.target)) return;
-//     this.Id = null;
-//   }
 }
 </script>
 
