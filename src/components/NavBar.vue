@@ -7,6 +7,8 @@
     >
       <div class="menu-item">
         <a href="#">{{ genre.name }}</a>
+      </div>
+      <div v-if="genre.id === Id">
         <Dropdown v-bind:bandsId="Id" />
       </div>
     </nav>
