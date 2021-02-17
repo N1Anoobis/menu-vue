@@ -41,11 +41,11 @@ export default class NavBar extends Vue {
     this.isActive = true;
   }
 
-onClickOutside(event: Event) {
-      const { collabsibles } = this.$refs;
-      if (!collabsibles || collabsibles.contains(event.target)) return;
-      this.Id = null;
-
+//   onClickOutside(event: Event) {
+//     const { collabsibles } = this.$refs;
+//     if (!collabsibles || collabsibles.contains(event.target)) return;
+//     this.Id = null;
+//   }
 }
 </script>
 
