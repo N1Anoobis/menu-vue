@@ -3009,6 +3009,11 @@ flush-write-stream@^1.0.0:
     inherits "^2.0.3"
     readable-stream "^2.3.6"
 
+focus-visible@^5.2.0:
+  version "5.2.0"
+  resolved "https://registry.yarnpkg.com/focus-visible/-/focus-visible-5.2.0.tgz#3a9e41fccf587bd25dcc2ef045508284f0a4d6b3"
+  integrity sha512-Rwix9pBtC1Nuy5wysTmKy+UjbDJpIfg8eHjw0rjZ1mX4GNLz1Bmd16uDpI3Gk1i70Fgcs8Csg2lPm8HULFg9DQ==
+
 follow-redirects@^1.0.0:
   version "1.13.2"
   resolved "https://registry.yarnpkg.com/follow-redirects/-/follow-redirects-1.13.2.tgz#dd73c8effc12728ba5cf4259d760ea5fb83e3147"
@@ -7276,6 +7281,13 @@ vue-class-component@^7.2.3:
   version "7.2.6"
   resolved "https://registry.yarnpkg.com/vue-class-component/-/vue-class-component-7.2.6.tgz#8471e037b8e4762f5a464686e19e5afc708502e4"
   integrity sha512-+eaQXVrAm/LldalI272PpDe3+i4mPis0ORiMYxF6Ae4hyuCh15W8Idet7wPUEs4N4YptgFHGys4UrgNQOMyO6w==
+
+vue-dock-menu@^1.0.2:
+  version "1.0.2"
+  resolved "https://registry.yarnpkg.com/vue-dock-menu/-/vue-dock-menu-1.0.2.tgz#2716a55371069691fde7615e308152f46ce6df8d"
+  integrity sha512-8TSjhYBa7L4idCtDROpoWeHihIrT3KaU4W4Gry2gIapCDiN9X/xFvnznlC7c7nyF/szt9+IQOeIs12jP8iPiRg==
+  dependencies:
+    focus-visible "^5.2.0"
 
 vue-eslint-parser@^7.0.0:
   version "7.5.0"
