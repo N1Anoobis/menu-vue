@@ -8,7 +8,7 @@
       <div class="menu-item">
         <a href="#">{{ genre.name }}</a>
       </div>
-      <div v-if="genre.id === Id">
+      <div v-if="genre.id === Id" v-on:hide-="close">
         <Dropdown v-bind:bandsId="Id" />
       </div>
     </nav>
@@ -25,22 +25,25 @@ import { Component, Vue, Prop } from "vue-property-decorator";
   },
 })
 export default class NavBar extends Vue {
-  @Prop() Id?: number;
+  @Prop() Id?: number | null;
+  @Prop({ default: false }) isActive: boolean;
 
   get genres() {
     return this.$store.state.genres;
   }
   setBands(genre: number) {
+    if (this.Id && this.isActive === true) {
+      this.Id = null;
+      this.isActive = false;
+      return;
+    }
     this.Id = genre;
-  }
-
-  computed() {
-    this.Id = -1;
+    this.isActive = true;
   }
 }
 </script>
 
-<style>
+<style scoped>
 .nav-container {
   display: flex;
 }
@@ -58,6 +61,7 @@ nav .menu-item {
   border-bottom: 3px solid transparent;
   display: flex;
   transition: 0.4s;
+  border-radius: 20%;
 }
 
 nav .menu-item.active,

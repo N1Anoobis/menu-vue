@@ -25,9 +25,12 @@ export default class App extends Vue {}
 }
 body {
   font-family: ubuntu, sans-serif;
+  height: 100vh;
+  background-color: #bbb;
 }
+
 header {
-  min-width: 100vh;
+  width: 100vw;
   background-color: #222;
   padding: 15px;
 }
