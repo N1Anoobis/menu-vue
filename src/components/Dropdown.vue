@@ -3,7 +3,7 @@
     <ul
       v-for="band in bands"
       :key="band.id"
-      v-on:mouseover.stop="setAlbums(band.id)"
+      v-on:mouseover="setAlbums(band.id)"
     >
       <li class="menu-item">
         <a href="#">{{ band.name }}</a>

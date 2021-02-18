@@ -31,7 +31,7 @@ export default class NavBar extends Vue {
   get genres() {
     return this.$store.state.genres;
   }
-  
+
   setBands(genre: number) {
     if (this.Id && this.isActive === true) {
       this.Id = null;
