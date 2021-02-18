@@ -1,17 +1,17 @@
 <template>
   <div class="nav-container-second-level">
-    <nav
+    <ul
       v-for="band in bands"
       :key="band.id"
       v-on:mouseover.stop="setAlbums(band.id)"
     >
-      <div class="menu-item">
+      <li class="menu-item">
         <a href="#">{{ band.name }}</a>
-      </div>
+      </li>
       <div v-if="band.id === Id">
         <AlbumsDropdown v-bind:albumsId="Id" />
       </div>
-    </nav>
+    </ul>
   </div>
 </template>
 

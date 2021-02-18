@@ -1,10 +1,10 @@
 <template>
   <div class="nav-container-second-level">
-    <nav v-for="musican in this.musicans" :key="musican.id">
-      <div class="menu-item">
+    <ul v-for="musican in this.musicans" :key="musican.id">
+      <li class="menu-item">
         <a href="#">{{ musican.name }}</a>
-      </div>
-    </nav>
+      </li>
+    </ul>
   </div>
 </template>
 
