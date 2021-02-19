@@ -5,6 +5,7 @@ Vue.use(Vuex);
 
 export default new Vuex.Store({
   state: {
+    albumsData: "",
     genres: [
       {
         id: 1,
@@ -74,7 +75,15 @@ export default new Vuex.Store({
       },
     ],
   },
-  mutations: {},
-  actions: {},
+  mutations: {
+    setAlbumsData: (state, data) => {
+      state.albumsData = data;
+    },
+  },
+  actions: {
+    storeAlbums(context, data) {
+      context.commit("setAlbumsData", data);
+    },
+  },
   modules: {},
 });

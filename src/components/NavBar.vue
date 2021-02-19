@@ -1,15 +1,21 @@
 <template>
-  <div class="nav-container">
-    <nav
-      v-for="genre in genres"
-      :key="genre.id"
-      v-on:click="setBands(genre.id)"
-    >
-      <div class="menu-item">
-        <a href="#">{{ genre.name }}</a>
+  <div class="nav-container" @mouseleave="clearAlbooms">
+    <nav>
+      <div
+        class="nav"
+        v-for="genre in genres"
+        :key="genre.id"
+        v-on:click="setBands(genre.id)"
+      >
+        <div class="menu-item">
+          <a @mouseover="close" href="#">{{ genre.name }}</a>
+        </div>
+        <div v-if="genre.id === index" @mouseover="setAlbums">
+          <Dropdown v-bind:bandArray="bandArray" />
+        </div>
       </div>
-      <div v-if="genre.id === Id">
-        <Dropdown v-bind:bandsId="Id" />
+      <div v-if="index">
+        <Dropdown v-bind:bandArray="setAlbums" class="second-level" />
       </div>
     </nav>
   </div>
@@ -25,21 +31,41 @@ import { Component, Vue, Prop } from "vue-property-decorator";
   },
 })
 export default class NavBar extends Vue {
-  @Prop() Id?: number | null;
-  @Prop({ default: false }) isActive: boolean;
+  @Prop() Id?: any;
+  @Prop() index?: number;
+  @Prop() albooms?: object[] | null;
+  @Prop({ default: false }) bandArray: object[] | null;
 
   get genres() {
     return this.$store.state.genres;
   }
 
-  setBands(genre: number) {
-    if (this.Id && this.isActive === true) {
-      this.Id = null;
-      this.isActive = false;
-      return;
+  get setAlbums() {
+    return (this.albooms = this.$store.state.albumsData);
+  }
+
+  setBands(index: number) {
+    if (this.bandArray) {
+      this.close();
     }
-    this.Id = genre;
-    this.isActive = true;
+
+    this.clearAlbooms();
+    const genres = this.$store.state.genres;
+    const bands = this.$store.state.bands;
+    this.index = index;
+    this.Id = genres[index - 1].bands;
+    if (this.Id) {
+      this.bandArray = [bands[this.Id[0] - 1], bands[this.Id[0]]];
+    }
+  }
+
+  close() {
+    this.bandArray = null;
+    this.clearAlbooms();
+  }
+
+  clearAlbooms() {
+    this.$store.dispatch("storeAlbums", null);
   }
 }
 </script>
@@ -54,7 +80,7 @@ nav {
   align-items: center;
   justify-content: center;
 }
-nav .menu-item {
+.menu-item {
   color: #fff;
   padding: 10px 20px;
   position: relative;
@@ -63,6 +89,9 @@ nav .menu-item {
   display: flex;
   transition: 0.4s;
   border-radius: 20%;
+  min-width: 120px;
+  max-width: 120px;
+  font-size: 15px;
 }
 
 nav .menu-item.active,
@@ -74,5 +103,11 @@ nav .menu-item:hover {
 nav .menu-item a {
   color: inherit;
   text-decoration: none;
+  display: block;
+  width: 100%;
+}
+
+.second-level {
+  transform: translate(-180px, 100px);
 }
 </style>
