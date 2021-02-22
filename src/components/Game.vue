@@ -20,7 +20,7 @@
       </section>
       <section class="container" v-if="winner">
         <h2>Game Over</h2>
-        <h3 v-if="winner === 'monster'">AI Lost</h3>
+        <h3 v-if="winner === 'monster'">AI Won</h3>
         <h3 v-if="winner === 'player'">Human Won</h3>
         <h3 v-if="winner === 'draw'">Draw</h3>
         <button @click="startNewGame">Start New Game</button>
