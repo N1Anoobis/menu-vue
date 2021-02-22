@@ -1,39 +1,60 @@
 <template>
   <body>
     <header>
-      <h1>Monster Slayer</h1>
+      <h1>
+        Artificial intelligence
+      </h1>
     </header>
     <div id="game">
       <section id="monster" class="container">
-        <h2>Monster Health</h2>
+        <h2>AI Health</h2>
         <div class="healthbar">
           <div class="healthbar__value" :style="monsterBarStyles"></div>
         </div>
       </section>
       <section id="player" class="container">
-        <h2>Your Health</h2>
+        <h2>Human Health</h2>
         <div class="healthbar">
           <div class="healthbar__value" :style="playerBarStyles"></div>
         </div>
       </section>
       <section class="container" v-if="winner">
         <h2>Game Over</h2>
-        <h3 v-if="winner === 'monster'">You Lost</h3>
-        <h3 v-if="winner === 'player'">You Won</h3>
+        <h3 v-if="winner === 'monster'">AI Lost</h3>
+        <h3 v-if="winner === 'player'">Human Won</h3>
         <h3 v-if="winner === 'draw'">Draw</h3>
         <button @click="startNewGame">Start New Game</button>
       </section>
-      <section id="controls">
+      <section id="controls" v-else>
         <button @click="attackMonster">ATTACK</button>
         <button :disabled="mayUseSpecialAttack" @click="specialAttack">
           SPECIAL ATTACK
         </button>
         <button :disabled="mayHeal" @click="healPlayer">HEAL</button>
-        <button>SURRENDER</button>
+        <button @click="surrender">SURRENDER</button>
       </section>
       <section id="log" class="container">
         <h2>Battle Log</h2>
-        <ul></ul>
+        <ul>
+          <li
+            v-for="(logMessage, idx) in logMessages"
+            :key="logMessage.actionBy + idx"
+          >
+            <span :class="setClass(logMessage.actionBy)">{{
+              logMessage.actionBy === "player" ? "Human" : "AI"
+            }}</span>
+            <span v-if="logMessage.actionType === 'heal'">
+              heals himself for
+              <span class="log--heal">{{ logMessage.actionValue }}</span></span
+            >
+            <span v-else>
+              attack damaged by
+              <span class="log--damage">{{
+                logMessage.actionValue
+              }}</span></span
+            >
+          </li>
+        </ul>
       </section>
     </div>
   </body>
@@ -49,6 +70,7 @@ export default class NavBar extends Vue {
   private monsterHealth = 100;
   private currentRound = 1;
   private winner: null | string = null;
+  private logMessages: unknown[] = [];
 
   get monsterBarStyles(): object {
     if (this.monsterHealth < 0) {
@@ -64,11 +86,11 @@ export default class NavBar extends Vue {
     return { width: this.playerHealth + "%" };
   }
 
-  get mayUseSpecialAttack() {
+  get mayUseSpecialAttack(): boolean {
     return this.currentRound % 3 !== 0;
   }
 
-  get mayHeal() {
+  get mayHeal(): boolean {
     return this.currentRound % 7 !== 0;
   }
 
@@ -80,18 +102,21 @@ export default class NavBar extends Vue {
     this.currentRound++;
     const attackValue = this.randomValue(12, 5);
     this.monsterHealth -= attackValue;
+    this.addLogMessage("player", "attack", attackValue);
     this.attackPlayer();
   }
 
   attackPlayer(): void {
     const attackValue = this.randomValue(15, 8);
     this.playerHealth -= attackValue;
+    this.addLogMessage("monster", "attack", attackValue);
   }
 
   specialAttack(): void {
     this.currentRound++;
     const attackValue = this.randomValue(10, 25);
     this.monsterHealth -= attackValue;
+    this.addLogMessage("player", "special-attack", attackValue);
     this.attackPlayer();
   }
 
@@ -102,14 +127,35 @@ export default class NavBar extends Vue {
     this.currentRound++;
     const healValue = this.randomValue(15, 20);
     this.playerHealth += healValue;
+    this.addLogMessage("player", "heal", healValue);
     this.attackPlayer();
   }
 
-  startNewGame() {
+  startNewGame(): void {
     this.playerHealth = 100;
     this.monsterHealth = 100;
     this.winner = null;
     this.currentRound = 1;
+    this.logMessages = [];
+  }
+
+  surrender(): void {
+    this.winner = "monster";
+  }
+
+  addLogMessage(side: string, action: string, value: number) {
+    this.logMessages.unshift({
+      actionBy: side,
+      actionType: action,
+      actionValue: value,
+    });
+  }
+
+  setClass(message: string): object {
+    return {
+      "log--player": message === "player",
+      "log--monster": message === "monster",
+    };
   }
 
   @Watch("playerHealth")
