@@ -21,6 +21,7 @@
         <h3 v-if="winner === 'monster'">You Lost</h3>
         <h3 v-if="winner === 'player'">You Won</h3>
         <h3 v-if="winner === 'draw'">Draw</h3>
+        <button @click="startNewGame">Start New Game</button>
       </section>
       <section id="controls">
         <button @click="attackMonster">ATTACK</button>
@@ -57,7 +58,7 @@ export default class NavBar extends Vue {
   }
 
   get playerBarStyles(): object {
-    if (this.monsterHealth < 0) {
+    if (this.playerHealth < 0) {
       return { width: "0%" };
     }
     return { width: this.playerHealth + "%" };
@@ -103,6 +104,14 @@ export default class NavBar extends Vue {
     this.playerHealth += healValue;
     this.attackPlayer();
   }
+
+  startNewGame() {
+    this.playerHealth = 100;
+    this.monsterHealth = 100;
+    this.winner = null;
+    this.currentRound = 1;
+  }
+
   @Watch("playerHealth")
   playerLose(value: number) {
     if (value <= 0 && this.monsterHealth <= 0) {
