@@ -18,7 +18,9 @@
       </section>
       <section id="controls">
         <button @click="attackMonster">ATTACK</button>
-        <button>SPECIAL ATTACK</button>
+        <button :disabled="mayUseSpecialAttack" @click="specialAttack">
+          SPECIAL ATTACK
+        </button>
         <button>HEAL</button>
         <button>SURRENDER</button>
       </section>
@@ -36,8 +38,9 @@ import { Component, Vue } from "vue-property-decorator";
   name: "navbar",
 })
 export default class NavBar extends Vue {
-  playerHealth = 100;
-  monsterHealth = 100;
+  private playerHealth = 100;
+  private monsterHealth = 100;
+  private currentRound = 0;
 
   get monsterBarStyles(): object {
     return { width: this.monsterHealth + "%" };
@@ -47,11 +50,16 @@ export default class NavBar extends Vue {
     return { width: this.playerHealth + "%" };
   }
 
+  get mayUseSpecialAttack() {
+    return this.currentRound % 3 !== 0;
+  }
+
   randomValue(min: number, max: number): number {
     return Math.floor(Math.random() * (max - min)) + min;
   }
 
   attackMonster(): void {
+    this.currentRound++;
     const attackValue = this.randomValue(12, 5);
     this.monsterHealth -= attackValue;
     this.attackPlayer();
@@ -60,6 +68,13 @@ export default class NavBar extends Vue {
   attackPlayer(): void {
     const attackValue = this.randomValue(15, 8);
     this.playerHealth -= attackValue;
+  }
+
+  specialAttack(): void {
+    this.currentRound++;
+    const attackValue = this.randomValue(10, 25);
+    this.monsterHealth -= attackValue;
+    this.attackPlayer();
   }
 }
 </script>
