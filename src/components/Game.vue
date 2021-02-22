@@ -16,6 +16,12 @@
           <div class="healthbar__value" :style="playerBarStyles"></div>
         </div>
       </section>
+      <section class="container" v-if="winner">
+        <h2>Game Over</h2>
+        <h3 v-if="winner === 'monster'">You Lost</h3>
+        <h3 v-if="winner === 'player'">You Won</h3>
+        <h3 v-if="winner === 'draw'">Draw</h3>
+      </section>
       <section id="controls">
         <button @click="attackMonster">ATTACK</button>
         <button :disabled="mayUseSpecialAttack" @click="specialAttack">
@@ -33,7 +39,7 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue } from "vue-property-decorator";
+import { Component, Vue, Watch } from "vue-property-decorator";
 @Component({
   name: "navbar",
 })
@@ -41,12 +47,19 @@ export default class NavBar extends Vue {
   private playerHealth = 100;
   private monsterHealth = 100;
   private currentRound = 1;
+  private winner: null | string = null;
 
   get monsterBarStyles(): object {
+    if (this.monsterHealth < 0) {
+      return { width: "0%" };
+    }
     return { width: this.monsterHealth + "%" };
   }
 
   get playerBarStyles(): object {
+    if (this.monsterHealth < 0) {
+      return { width: "0%" };
+    }
     return { width: this.playerHealth + "%" };
   }
 
@@ -55,7 +68,7 @@ export default class NavBar extends Vue {
   }
 
   get mayHeal() {
-    return this.currentRound % 6 !== 0;
+    return this.currentRound % 7 !== 0;
   }
 
   randomValue(min: number, max: number): number {
@@ -89,6 +102,23 @@ export default class NavBar extends Vue {
     const healValue = this.randomValue(15, 20);
     this.playerHealth += healValue;
     this.attackPlayer();
+  }
+  @Watch("playerHealth")
+  playerLose(value: number) {
+    if (value <= 0 && this.monsterHealth <= 0) {
+      this.winner = "draw";
+    } else if (value <= 0) {
+      this.winner = "monster";
+    }
+  }
+
+  @Watch("monsterHealth")
+  monsterLose(value: number) {
+    if (value <= 0 && this.playerHealth <= 0) {
+      this.winner = "draw";
+    } else if (value <= 0) {
+      this.winner = "player";
+    }
   }
 }
 </script>
