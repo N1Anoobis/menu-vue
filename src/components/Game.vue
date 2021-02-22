@@ -7,13 +7,13 @@
       <section id="monster" class="container">
         <h2>Monster Health</h2>
         <div class="healthbar">
-          <div class="healthbar__value"></div>
+          <div class="healthbar__value" :style="monsterBarStyles"></div>
         </div>
       </section>
       <section id="player" class="container">
         <h2>Your Health</h2>
         <div class="healthbar">
-          <div class="healthbar__value"></div>
+          <div class="healthbar__value" :style="playerBarStyles"></div>
         </div>
       </section>
       <section id="controls">
@@ -39,17 +39,25 @@ export default class NavBar extends Vue {
   playerHealth = 100;
   monsterHealth = 100;
 
+  get monsterBarStyles(): object {
+    return { width: this.monsterHealth + "%" };
+  }
+
+  get playerBarStyles(): object {
+    return { width: this.playerHealth + "%" };
+  }
+
   randomValue(min: number, max: number): number {
     return Math.floor(Math.random() * (max - min)) + min;
   }
 
-  attackMonster() {
+  attackMonster(): void {
     const attackValue = this.randomValue(12, 5);
     this.monsterHealth -= attackValue;
     this.attackPlayer();
   }
 
-  attackPlayer() {
+  attackPlayer(): void {
     const attackValue = this.randomValue(15, 8);
     this.playerHealth -= attackValue;
   }
